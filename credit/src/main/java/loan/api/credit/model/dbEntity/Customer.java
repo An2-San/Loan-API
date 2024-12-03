@@ -40,5 +40,14 @@ public class Customer {
     @Column(name = "usedCreditLimit")
     private BigDecimal usedCreditLimit;
 
+    @Transient
+    public BigDecimal getRemainingCreditLimit(){
+        return creditLimit.subtract(usedCreditLimit == null ? BigDecimal.ZERO : usedCreditLimit);
+    }
+
+    @Transient
+    public void updateRemainingCreditLimit(BigDecimal loanAmount){
+        usedCreditLimit = usedCreditLimit == null ? loanAmount : usedCreditLimit.add(loanAmount);
+    }
 
 }

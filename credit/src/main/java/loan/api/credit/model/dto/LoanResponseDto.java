@@ -5,14 +5,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class LoanDto {
+public class LoanResponseDto {
 
-    private String customerId;
     private BigDecimal loanAmount;
-    private Float interestRate;
+    private ZonedDateTime createDate;
     private Integer numberOfInstallments;
+    private Boolean isPaid;
 }

@@ -1,7 +1,7 @@
 package loan.api.credit.validation;
 
 import loan.api.credit.model.dbEntity.Customer;
-import loan.api.credit.model.dto.LoanDto;
+import loan.api.credit.model.dto.LoanRequestDto;
 import loan.api.credit.repository.CustomerRepository;
 import loan.api.credit.util.LoanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,27 +20,26 @@ public class LoanValidationService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public void validateLoanDto(LoanDto loanDto) {
-        Optional<Customer> customerOptional = customerRepository.findById(loanDto.getCustomerId());
+    public void validateLoanDto(LoanRequestDto loanRequestDto, Optional<Customer> customerOptional) {
         if (customerOptional.isEmpty()) {
             throwValidationException("Customer does not found");
         }
         Customer customer = customerOptional.get();
 
-        BigDecimal customerCreditLimit = customer.getCreditLimit();
+        BigDecimal remainingCreditLimit = customer.getRemainingCreditLimit();
 
-        if (customerCreditLimit.compareTo(loanDto.getLoanAmount()) < 0) {
+        if (remainingCreditLimit.compareTo(loanRequestDto.getCalculatedLoanAmountWithInterest()) < 0) {
             throwValidationException("Customer does not have enough limit to create loan");
         }
 
         LoanUtil.NUMBER_OF_INSTALLMENT[] numberOfInstallments = LoanUtil.NUMBER_OF_INSTALLMENT.values();
 
         if (Arrays.stream(numberOfInstallments).
-                noneMatch(numberOfInstallment -> numberOfInstallment.getValue().equals(loanDto.getNumberOfInstallments()))) {
+                noneMatch(numberOfInstallment -> numberOfInstallment.getValue().equals(loanRequestDto.getNumberOfInstallments()))) {
             throwValidationException("Invalid number of installments. Valid options :" + Arrays.toString(EnumSet.allOf(LoanUtil.NUMBER_OF_INSTALLMENT.class).stream().map(LoanUtil.NUMBER_OF_INSTALLMENT::getValue).toArray()));
         }
 
-        if (loanDto.getInterestRate() < 0.1 || loanDto.getInterestRate() > 0.5) {
+        if (loanRequestDto.getInterestRate() < 0.1 || loanRequestDto.getInterestRate() > 0.5) {
             throwValidationException("Invalid interest rate. Valid interval : 0.1 - 0.5");
         }
 

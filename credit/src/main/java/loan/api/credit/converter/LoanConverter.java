@@ -3,7 +3,7 @@ package loan.api.credit.converter;
 
 import loan.api.credit.model.dbEntity.Loan;
 import loan.api.credit.model.dbEntity.LoanInstallment;
-import loan.api.credit.model.dto.LoanDto;
+import loan.api.credit.model.dto.LoanRequestDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -19,16 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class LoanConverter implements Converter<LoanDto, Loan> {
+public class LoanConverter implements Converter<LoanRequestDto, Loan> {
 
     @Override
-    public Loan convert(LoanDto source) {
+    public Loan convert(LoanRequestDto source) {
         Loan loan = new Loan();
         ZonedDateTime currentDate = ZonedDateTime.now();
         loan.setCreateDate(currentDate);
 
         // Calculate total loan amount using interest rate
-        BigDecimal totalLoanAmount = BigDecimal.valueOf((1 + source.getInterestRate())).multiply(source.getLoanAmount()).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal totalLoanAmount = source.getCalculatedLoanAmountWithInterest();
         loan.setLoanAmount(totalLoanAmount);
         loan.setNumberOfInstallment(source.getNumberOfInstallments());
         loan.setIsPaid(false);
@@ -36,17 +36,18 @@ public class LoanConverter implements Converter<LoanDto, Loan> {
 
         List<LoanInstallment> loanInstallmentList = new ArrayList<>();
         // Calculate single loan installment amount
-        BigDecimal loanInstallmentAmount = totalLoanAmount.divide(BigDecimal.valueOf(source.getNumberOfInstallments())).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal loanInstallmentAmount = totalLoanAmount.divide(BigDecimal.valueOf(source.getNumberOfInstallments()),2,RoundingMode.HALF_UP);
         for (int i = 0; i < source.getNumberOfInstallments(); i++) {
             LoanInstallment loanInstallment = new LoanInstallment();
             loanInstallment.setIsPaid(false);
             loanInstallment.setLoan(loan);
             loanInstallment.setAmount(loanInstallmentAmount);
             // Get the next month's first day
-            LocalDate today = LocalDate.now();
+            LocalDate today = LocalDate.now().plusMonths(i);
             TemporalAdjuster temporalAdjuster = TemporalAdjusters.firstDayOfNextMonth();
             LocalDate firstOfNextMonth = today.with(temporalAdjuster);
-            loanInstallment.setDueDate(ZonedDateTime.of(firstOfNextMonth, LocalTime.MAX, ZoneId.systemDefault()));
+            ZonedDateTime firstOfNextMonthZonedDateTime = ZonedDateTime.of(firstOfNextMonth, LocalTime.of(23,59), ZoneId.systemDefault());
+            loanInstallment.setDueDate(firstOfNextMonthZonedDateTime);
             loanInstallmentList.add(loanInstallment);
         }
         loan.setLoanInstallmentList(loanInstallmentList);
