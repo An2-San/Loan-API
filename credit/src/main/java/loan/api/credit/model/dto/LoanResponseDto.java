@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 public class LoanResponseDto {
 
+    private String loanId;
     private BigDecimal loanAmount;
     private ZonedDateTime createDate;
     private Integer numberOfInstallments;

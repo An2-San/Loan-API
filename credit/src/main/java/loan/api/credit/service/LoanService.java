@@ -2,9 +2,12 @@ package loan.api.credit.service;
 
 import loan.api.credit.model.dbEntity.Customer;
 import loan.api.credit.model.dbEntity.Loan;
+import loan.api.credit.model.dbEntity.LoanInstallment;
+import loan.api.credit.model.dto.LoanInstallmentResponseDto;
 import loan.api.credit.model.dto.LoanRequestDto;
 import loan.api.credit.model.dto.LoanResponseDto;
 import loan.api.credit.repository.CustomerRepository;
+import loan.api.credit.repository.LoanInstallmentRepository;
 import loan.api.credit.repository.LoanRepository;
 import loan.api.credit.validation.LoanValidationService;
 import org.springframework.core.convert.ConversionService;
@@ -22,12 +25,15 @@ public class LoanService {
     private final LoanValidationService loanValidationService;
     private final ConversionService conversionService;
     private final LoanRepository loanRepository;
+    private final LoanInstallmentRepository loanInstallmentRepository;
     private final CustomerRepository customerRepository;
 
-    public LoanService(LoanValidationService loanValidationService, ConversionService conversionService, LoanRepository loanRepository, CustomerRepository customerRepository) {
+    public LoanService(LoanValidationService loanValidationService, ConversionService conversionService,
+                       LoanRepository loanRepository, LoanInstallmentRepository loanInstallmentRepository, CustomerRepository customerRepository) {
         this.conversionService = conversionService;
         this.loanValidationService = loanValidationService;
         this.loanRepository = loanRepository;
+        this.loanInstallmentRepository = loanInstallmentRepository;
         this.customerRepository = customerRepository;
     }
 
@@ -63,6 +69,23 @@ public class LoanService {
         });
 
         return loanResponseDtoList;
+    }
+
+    public List<LoanInstallmentResponseDto> listLoanInstallments(String loanId, Boolean isPaid) {
+
+        Optional<Loan> loanOptional = loanRepository.findById(loanId);
+        if (loanOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Loan does not found");
+        }
+
+        List<LoanInstallment> loanInstallmentList = loanInstallmentRepository.findByLoanAndIsPaid(loanOptional.get(), isPaid);
+
+        List<LoanInstallmentResponseDto> loanInstallmentResponseDtoList = new ArrayList<>();
+        loanInstallmentList.forEach(loanInstallment -> {
+            loanInstallmentResponseDtoList.add(conversionService.convert(loanInstallment, LoanInstallmentResponseDto.class));
+        });
+
+        return loanInstallmentResponseDtoList;
     }
 
 }

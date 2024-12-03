@@ -10,6 +10,7 @@ public class LoanResponseDtoConverter implements Converter<Loan, LoanResponseDto
     @Override
     public LoanResponseDto convert(Loan source) {
         LoanResponseDto loanResponseDto = new LoanResponseDto();
+        loanResponseDto.setLoanId(source.getId());
         loanResponseDto.setLoanAmount(source.getLoanAmount());
         loanResponseDto.setIsPaid(source.getIsPaid());
         loanResponseDto.setCreateDate(source.getCreateDate());
