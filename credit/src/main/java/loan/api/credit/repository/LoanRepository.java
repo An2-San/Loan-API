@@ -1,11 +1,10 @@
 package loan.api.credit.repository;
 
-
-import loan.api.credit.model.dbEntity.Customer;
+import loan.api.credit.model.dbEntity.Loan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, String> {
-    // TODO : Add some functions
+public interface LoanRepository extends JpaRepository<Loan, String> {
+
 }

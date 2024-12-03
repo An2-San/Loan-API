@@ -1,10 +1,8 @@
 package loan.api.credit.service;
 
-import loan.api.credit.converter.CustomerConverter;
 import loan.api.credit.model.dbEntity.Customer;
 import loan.api.credit.model.dto.CustomerDto;
 import loan.api.credit.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
