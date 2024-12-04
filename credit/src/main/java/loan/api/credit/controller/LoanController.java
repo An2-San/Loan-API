@@ -1,8 +1,6 @@
 package loan.api.credit.controller;
 
-import loan.api.credit.model.dto.LoanInstallmentResponseDto;
-import loan.api.credit.model.dto.LoanRequestDto;
-import loan.api.credit.model.dto.LoanResponseDto;
+import loan.api.credit.model.dto.*;
 import loan.api.credit.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +34,11 @@ public class LoanController {
     public ResponseEntity<List<LoanInstallmentResponseDto>> listLoanInstallments(@RequestParam String loanId,
                                                                       @RequestParam(required = false) Boolean isPaid)  {
         return ResponseEntity.ok(loanService.listLoanInstallments(loanId,isPaid));
+    }
+
+    @PostMapping("pay-loan")
+    public ResponseEntity<PayLoanResponseDto> payLoan(@RequestBody PayLoanRequestDto payLoanResponseDto)  {
+        return ResponseEntity.ok(loanService.payLoan(payLoanResponseDto));
     }
 
 }
