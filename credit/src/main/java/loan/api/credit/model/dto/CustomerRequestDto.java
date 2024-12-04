@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CustomerDto {
+public class CustomerRequestDto {
 
     private String name;
     private String surname;

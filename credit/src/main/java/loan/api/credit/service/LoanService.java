@@ -61,7 +61,7 @@ public class LoanService {
 
     }
 
-    public List<LoanResponseDto> listLoans(String customerId, Boolean isPaid, Integer numberOfInstallment) {
+    public List<LoanResponseDto> listLoans(String customerId,  Boolean isPaid, Integer numberOfInstallment) {
 
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
         if (customerOptional.isEmpty()) {
@@ -124,7 +124,7 @@ public class LoanService {
                     && Boolean.FALSE.equals(loanInstallment.getIsPaid())) {
 
                 BigDecimal paidAmount = loanInstallment.getAmount();
-                // Bonus 1 If an installment is paid before due date:
+                // Bonus 2 If an installment is paid before due date:
                 if(currentDateTime.isBefore(loanInstallment.getDueDate())){
                     long numberOfDaysBeforeDueDate = ChronoUnit.DAYS.between(currentDateTime,loanInstallment.getDueDate());
                     BigDecimal discountAmount = calculateBonusAmount(loanInstallment.getAmount(),numberOfDaysBeforeDueDate);

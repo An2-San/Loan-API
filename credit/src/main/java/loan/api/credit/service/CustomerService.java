@@ -1,10 +1,12 @@
 package loan.api.credit.service;
 
 import loan.api.credit.model.dbEntity.Customer;
-import loan.api.credit.model.dto.CustomerDto;
+import loan.api.credit.model.dto.CustomerRequestDto;
 import loan.api.credit.repository.CustomerRepository;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CustomerService {
@@ -19,12 +21,16 @@ public class CustomerService {
     }
 
 
-    public void createCustomer(CustomerDto customerDto) {
+    public Customer createCustomer(CustomerRequestDto customerRequestDto) {
 
-        Customer customer = conversionService.convert(customerDto,Customer.class);
+        Customer customer = conversionService.convert(customerRequestDto,Customer.class);
         assert customer != null;
-        customerRepository.save(customer);
+        return customerRepository.save(customer);
 
+    }
+
+    public List<Customer> listCustomers() {
+        return customerRepository.findAll();
     }
 
 }
