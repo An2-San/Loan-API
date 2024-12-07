@@ -99,7 +99,7 @@ public class LoanService {
     }
 
     @Transactional
-    public PayLoanResponseDto payLoan(PayLoanRequestDto payLoanRequestDto) {
+    public PayLoanResponseDto payLoan(PayLoanRequestDto payLoanRequestDto, ZonedDateTime paymentDate) {
 
         Optional<Loan> loanOptional = loanRepository.findById(payLoanRequestDto.getLoanId());
         if (loanOptional.isEmpty()) {
@@ -113,11 +113,11 @@ public class LoanService {
         BigDecimal totalPaidAmount = payLoanRequestDto.getAmount();
         BigDecimal totalLoanAmount = BigDecimal.ZERO;
         BigDecimal amountSpent = BigDecimal.ZERO;
-        ZonedDateTime currentDateTime = ZonedDateTime.now();
+
 
         List<Month> avaliableMonthList = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            avaliableMonthList.add(currentDateTime.getMonth().plus(i));
+            avaliableMonthList.add(paymentDate.getMonth().plus(i));
         }
 
         for (LoanInstallment loanInstallment : loanInstallmentList) {
@@ -126,15 +126,15 @@ public class LoanService {
 
                 BigDecimal paidAmount = loanInstallment.getAmount();
                 // Bonus 2 If an installment is paid before due date:
-                if(currentDateTime.isBefore(loanInstallment.getDueDate())){
-                    long numberOfDaysBeforeDueDate = ChronoUnit.DAYS.between(currentDateTime,loanInstallment.getDueDate());
+                if(paymentDate.toLocalDate().isBefore(loanInstallment.getDueDate().toLocalDate())){
+                    long numberOfDaysBeforeDueDate = ChronoUnit.DAYS.between(paymentDate,loanInstallment.getDueDate());
                     BigDecimal discountAmount = calculateBonusAmount(loanInstallment.getAmount(),numberOfDaysBeforeDueDate);
                     paidAmount = paidAmount.subtract(discountAmount);
                 }
 
                 // Bonus 2 If an installment is paid after due date:
-                else if(currentDateTime.isAfter(loanInstallment.getDueDate())){
-                    long numberOfDaysAfterDueDate = ChronoUnit.DAYS.between(loanInstallment.getDueDate(),currentDateTime);
+                else if(paymentDate.toLocalDate().isAfter(loanInstallment.getDueDate().toLocalDate())){
+                    long numberOfDaysAfterDueDate = ChronoUnit.DAYS.between(loanInstallment.getDueDate(),paymentDate);
                     BigDecimal penaltyAmount = calculateBonusAmount(loanInstallment.getAmount(),numberOfDaysAfterDueDate);
                     paidAmount = paidAmount.add(penaltyAmount);
                 }
