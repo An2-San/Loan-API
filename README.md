@@ -10,20 +10,20 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 6. [Endpoints](#endpoints)
 7. [Postman Collection](#postman-collection)
 
-## Features
+## 1. Features
 - Create Loan : Create a loan for a given customer.
 - List Loans: View all loans for a given customer.
 - List Loan Installments : View all loan installments for given loan.
 - Pay Loan : Pay loan installments with the support of bulk payments.
 - User authorization with basic authentication for both ADMIN and CUSTOMER roles.
 
-## Tech Stack
+## 2. Tech Stack
 - **Java 17**
 - **Spring Boot 3.4.0**
 - **Maven**
 - **H2 Database**
 
-## Installation
+## 3. Installation
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/username/loan-api.git](https://github.com/An2-San/Loan-API.git
@@ -37,13 +37,13 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 3. **Access the API :**
    The API will be available at http://localhost:8085.
 
-## Authorization
+## 4. Authorization
 - **While ADMIN users can operate for all customers, CUSTOMER role users can operate for themselves.** (Bonus 1)
 - ADMIN users can also access customer enpoints. 
 - **ADMIN credentials : Username : admin , Password : admin_secret**
 - **CUSTOMER credentials : Username : {customerId}, Password : admin_secret** (for CUSTOMER role, password is the same with the ADMIN role for test purposes)
 
-## Database
+## 5. Database
 - You can access h2 database at : http://localhost:8085/h2-console.
 - Note : **When application built a customer will be inserted with id : "e7f4d254-2ff5-4e5b-9f42-83591b8b7c57".**
 - H2 Database Access Credentials:
@@ -53,7 +53,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
   - Password : password
 
 
-## Endpoints
+## 6. Endpoints
 - /loan endpoints will be avaliable for both ADMIN and CUSTOMER users
 - /customer endpoints only avaliable for ADMIN users.
   
@@ -201,7 +201,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 ]
 ```
 
-## Postman Collection
+## 7. Postman Collection
 
 You can download postman collection from here : 
 
