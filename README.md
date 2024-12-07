@@ -10,20 +10,20 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 6. [Endpoints](#endpoints)
 7. [Postman Collection](#postman-collection)
 
-## 1. Features
+## Features
 - Create Loan : Create a loan for a given customer.
 - List Loans: View all loans for a given customer.
 - List Loan Installments : View all loan installments for given loan.
 - Pay Loan : Pay loan installments with the support of bulk payments.
 - User authorization with basic authentication for both ADMIN and CUSTOMER roles.
 
-## 2. Tech Stack
+## Tech Stack
 - **Java 17**
 - **Spring Boot 3.4.0**
 - **Maven**
 - **H2 Database**
 
-## 3. Installation
+## Installation
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/username/loan-api.git](https://github.com/An2-San/Loan-API.git
@@ -37,7 +37,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 3. **Access the API :**
    The API will be available at http://localhost:8085.
 
-## 4. Authorization
+## Authorization
 - **While ADMIN users can operate for all customers, CUSTOMER role users can operate for themselves.** (Bonus 1)
 - ADMIN users can also access customer enpoints. 
 - **ADMIN credentials : Username : admin , Password : admin_secret**
@@ -53,7 +53,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
   - Password : password
 
 
-## 6. Endpoints
+## Endpoints
 - /loan endpoints will be avaliable for both ADMIN and CUSTOMER users
 - /customer endpoints only avaliable for ADMIN users.
   
@@ -201,7 +201,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 ]
 ```
 
-## 7. Postman Collection
+## Postman Collection
 
 You can download postman collection from here : 
 
