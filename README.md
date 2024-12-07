@@ -8,6 +8,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 4. [Authorization](#authorization)
 5. [Database](#database)
 6. [Endpoints](#endpoints)
+7. [Tests](#tests)
 
 ## Features
 - Create Loan : Create a loan for a given customer.
@@ -29,6 +30,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
    ```
 2. **Build and run the application**
    ```bash
+   cd Loan-API\credit
    mvn clean install
    mvn spring-boot:run
    ```
@@ -200,3 +202,14 @@ Loan API is an REST API that employees can create, list and pay loans for their 
     }
 ]
 ```
+
+
+## Tests
+- Run this command to start LoanService unit tests :
+   ```bash
+   mvn -Dtest=LoanServiceTest test
+   ```
+- Run this command to start LoanValidationService unit tests :
+  ```bash
+   mvn -Dtest=LoanValidationTest test
+   ```
