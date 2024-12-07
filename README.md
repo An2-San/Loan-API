@@ -7,9 +7,13 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 
 # Database
 H2 Database is used.
+
 Driver Class:org.h2.Driver
+
 JDBC URL : jdbc:h2:mem:testdb
+
 User Name : sa
+
 Password : password
 
 # How To Use
