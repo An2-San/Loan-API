@@ -8,6 +8,7 @@ import loan.api.credit.model.dto.*;
 import loan.api.credit.repository.CustomerRepository;
 import loan.api.credit.repository.LoanInstallmentRepository;
 import loan.api.credit.repository.LoanRepository;
+import loan.api.credit.util.LoanUtil;
 import loan.api.credit.validation.LoanValidationService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
@@ -65,7 +66,7 @@ public class LoanService {
 
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
         if (customerOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer does not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, LoanUtil.EXCEPTION_MESSAGES.LOAN_NOT_FOUND.getExceptionMessage());
         }
 
 
@@ -83,7 +84,7 @@ public class LoanService {
 
         Optional<Loan> loanOptional = loanRepository.findById(loanId);
         if (loanOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Loan does not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, LoanUtil.EXCEPTION_MESSAGES.LOAN_NOT_FOUND.getExceptionMessage());
         }
 
         List<LoanInstallment> loanInstallmentList = loanOptional.get().getLoanInstallmentList().stream().
@@ -102,7 +103,7 @@ public class LoanService {
 
         Optional<Loan> loanOptional = loanRepository.findById(payLoanRequestDto.getLoanId());
         if (loanOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Loan does not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, LoanUtil.EXCEPTION_MESSAGES.LOAN_NOT_FOUND.getExceptionMessage());
         }
 
         Loan loan = loanOptional.get();
