@@ -25,7 +25,7 @@ public class SecurityConfig {
                 httpBasic(httpSecurityHttpBasicConfigurer ->
                         httpSecurityHttpBasicConfigurer.authenticationEntryPoint(new AuthenticationEntryPoint())).
                 formLogin(AbstractHttpConfigurer::disable).
-                // Added for managing h2 database. (Without this setting , h2 database gives an frame error)
+                // Added for managing h2 database. (Without this setting , h2 database gives a frame error)
                 headers().frameOptions().disable();
 
         return http.build();

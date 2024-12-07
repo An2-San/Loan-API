@@ -14,6 +14,5 @@ public interface LoanInstallmentRepository extends JpaRepository<LoanInstallment
 
     @Query("SELECT L FROM LoanInstallment L WHERE L.loan = :loan and (:isPaid IS NULL OR L.isPaid = :isPaid)")
     List<LoanInstallment> findByLoanAndIsPaid(@Param("loan") Loan loan, @Param("isPaid") Boolean isPaid);
-
-
+    
 }

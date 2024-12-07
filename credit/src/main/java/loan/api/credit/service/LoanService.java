@@ -49,7 +49,7 @@ public class LoanService {
     public void createLoan(LoanRequestDto loanRequestDto) {
 
         Optional<Customer> customerOptional = customerRepository.findById(loanRequestDto.getCustomerId());
-        loanValidationService.validateLoanDto(loanRequestDto,customerOptional);
+        loanValidationService.validateLoanDto(loanRequestDto, customerOptional);
 
         Loan loan = conversionService.convert(loanRequestDto, Loan.class);
         assert loan != null;
@@ -62,7 +62,7 @@ public class LoanService {
 
     }
 
-    public List<LoanResponseDto> listLoans(String customerId,  Boolean isPaid, Integer numberOfInstallment) {
+    public List<LoanResponseDto> listLoans(String customerId, Boolean isPaid, Integer numberOfInstallment) {
 
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
         if (customerOptional.isEmpty()) {
@@ -108,38 +108,42 @@ public class LoanService {
 
         Loan loan = loanOptional.get();
         List<LoanInstallment> loanInstallmentList = loan.getLoanInstallmentList();
+        // Order by due date asc (by default all installments sorted due date asc ,but sorted just in case)
         loanInstallmentList.sort((o1, o2) -> o1.getDueDate().compareTo(o2.getDueDate()));
 
         BigDecimal totalPaidAmount = payLoanRequestDto.getAmount();
         BigDecimal totalLoanAmount = BigDecimal.ZERO;
         BigDecimal amountSpent = BigDecimal.ZERO;
 
-
+        // Installments have due date that still more than 3 calendar months cannot be paid.
+        // So if we were in January, you could pay only for January, February and March installments.
         List<Month> avaliableMonthList = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             avaliableMonthList.add(paymentDate.getMonth().plus(i));
         }
 
         for (LoanInstallment loanInstallment : loanInstallmentList) {
+            // Check for month and paid status
             if (avaliableMonthList.contains(loanInstallment.getDueDate().getMonth())
                     && Boolean.FALSE.equals(loanInstallment.getIsPaid())) {
 
                 BigDecimal paidAmount = loanInstallment.getAmount();
                 // Bonus 2 If an installment is paid before due date:
-                if(paymentDate.toLocalDate().isBefore(loanInstallment.getDueDate().toLocalDate())){
-                    long numberOfDaysBeforeDueDate = ChronoUnit.DAYS.between(paymentDate,loanInstallment.getDueDate());
-                    BigDecimal discountAmount = calculateBonusAmount(loanInstallment.getAmount(),numberOfDaysBeforeDueDate);
+                if (paymentDate.toLocalDate().isBefore(loanInstallment.getDueDate().toLocalDate())) {
+                    long numberOfDaysBeforeDueDate = ChronoUnit.DAYS.between(paymentDate, loanInstallment.getDueDate());
+                    BigDecimal discountAmount = calculateBonusAmount(loanInstallment.getAmount(), numberOfDaysBeforeDueDate);
                     paidAmount = paidAmount.subtract(discountAmount);
                 }
 
                 // Bonus 2 If an installment is paid after due date:
-                else if(paymentDate.toLocalDate().isAfter(loanInstallment.getDueDate().toLocalDate())){
-                    long numberOfDaysAfterDueDate = ChronoUnit.DAYS.between(loanInstallment.getDueDate(),paymentDate);
-                    BigDecimal penaltyAmount = calculateBonusAmount(loanInstallment.getAmount(),numberOfDaysAfterDueDate);
+                else if (paymentDate.toLocalDate().isAfter(loanInstallment.getDueDate().toLocalDate())) {
+                    long numberOfDaysAfterDueDate = ChronoUnit.DAYS.between(loanInstallment.getDueDate(), paymentDate);
+                    BigDecimal penaltyAmount = calculateBonusAmount(loanInstallment.getAmount(), numberOfDaysAfterDueDate);
                     paidAmount = paidAmount.add(penaltyAmount);
                 }
 
-                if(totalPaidAmount.compareTo(paidAmount) >= 0){
+                // If there are more money then you should continue to next installment payment.
+                if (totalPaidAmount.compareTo(paidAmount) >= 0) {
                     loanInstallment.setPaidAmount(paidAmount);
                     loanInstallment.setIsPaid(true);
                     loanInstallment.setPaymentDate(ZonedDateTime.now());
@@ -147,7 +151,8 @@ public class LoanService {
                     totalPaidAmount = totalPaidAmount.subtract(loanInstallment.getAmount());
                     totalLoanAmount = totalLoanAmount.add(loanInstallment.getAmount());
                 }
-                else{
+                // If earliest installment payment failed , other installments cannot be paid.
+                else {
                     break;
                 }
 
@@ -157,17 +162,21 @@ public class LoanService {
 
         int numberOfInstallmentsPaid = 0;
         BigDecimal totalAmountSpent = BigDecimal.ZERO;
-        for(LoanInstallment loanInstallment : loanInstallmentList){
-            if(Boolean.TRUE.equals(loanInstallment.getIsPaid())){
+        // Get the total numberOfInstallmentPaid
+        for (LoanInstallment loanInstallment : loanInstallmentList) {
+            if (Boolean.TRUE.equals(loanInstallment.getIsPaid())) {
                 numberOfInstallmentsPaid++;
             }
+            // Calculate the total amount spent by using paidAmount
             totalAmountSpent = totalAmountSpent.add(loanInstallment.getPaidAmount() == null ? BigDecimal.ZERO : loanInstallment.getPaidAmount());
         }
+        // Check if the loan isPaid compeletly
         Boolean isPaidCompeletly = numberOfInstallmentsPaid == loanInstallmentList.size();
-        if(Boolean.TRUE.equals(isPaidCompeletly)){
+        if (Boolean.TRUE.equals(isPaidCompeletly)) {
             loan.setIsPaid(isPaidCompeletly);
         }
 
+        // Update customer , loan and loan installment tables.
         Customer customer = customerRepository.findById(loan.getCustomerId()).get();
         customer.setUsedCreditLimit(customer.getUsedCreditLimit().subtract(totalLoanAmount));
 
@@ -182,8 +191,8 @@ public class LoanService {
     }
 
 
-    private BigDecimal calculateBonusAmount(BigDecimal amount,long numberOfDays){
-        return amount.multiply(new BigDecimal(0.001)).multiply(new BigDecimal(numberOfDays)).setScale(2,RoundingMode.HALF_UP);
+    private BigDecimal calculateBonusAmount(BigDecimal amount, long numberOfDays) {
+        return amount.multiply(new BigDecimal(0.001)).multiply(new BigDecimal(numberOfDays)).setScale(2, RoundingMode.HALF_UP);
     }
 
 }

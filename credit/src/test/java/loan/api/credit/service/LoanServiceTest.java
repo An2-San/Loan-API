@@ -48,8 +48,11 @@ public class LoanServiceTest {
     private Loan loan;
 
     /**
+     * Test case:
      * Each loan installment amount : 100
+     * Interest rate : 0.2
      * Total loan amount with interest : 600
+     * Number of installment : 6
      */
     @BeforeEach
     public void setup() {
@@ -160,7 +163,7 @@ public class LoanServiceTest {
     }
 
     /**
-     *  Bonus 2: Pay the first loan installment with penalty
+     * Bonus 2: Pay the first loan installment with penalty
      */
     @Test
     public void payFirstLoanInstallmentWithPenaltySuccess() {
@@ -177,6 +180,9 @@ public class LoanServiceTest {
         Assertions.assertEquals(1, payLoanResponseDto.getTotalAmountSpent().compareTo(firstLoanInstallment.getAmount()));
     }
 
+    /**
+     * Pay all loan installments
+     */
     @Test
     public void payAllLoanInstallments() {
         payLoanRequestDto.setAmount(new BigDecimal(100000).setScale(2, RoundingMode.HALF_UP));

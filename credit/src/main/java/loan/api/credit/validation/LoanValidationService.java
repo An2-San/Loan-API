@@ -17,6 +17,7 @@ import static loan.api.credit.util.LoanUtil.EXCEPTION_MESSAGES.*;
 public class LoanValidationService {
 
     public void validateLoanDto(LoanRequestDto loanRequestDto, Optional<Customer> customerOptional) {
+        // Check if the customer exists.
         if (customerOptional.isEmpty()) {
             throwValidationException(CUSTOMER_NOT_FOUND);
         }
@@ -24,17 +25,20 @@ public class LoanValidationService {
 
         BigDecimal remainingCreditLimit = customer.getRemainingCreditLimit();
 
+        // Check if the customer has enough credit limit
         if (remainingCreditLimit.compareTo(loanRequestDto.getCalculatedLoanAmountWithInterest()) < 0) {
             throwValidationException(LOAN_INVALID_CREDIT_LIMIT);
         }
 
         LoanUtil.NUMBER_OF_INSTALLMENT[] numberOfInstallments = LoanUtil.NUMBER_OF_INSTALLMENT.values();
 
+        // Check if number of installment is valid
         if (Arrays.stream(numberOfInstallments).
                 noneMatch(numberOfInstallment -> numberOfInstallment.getValue().equals(loanRequestDto.getNumberOfInstallments()))) {
             throwValidationException(LOAN_INVALID_INSTALLMENT_NUMBER);
         }
 
+        // Check if interest rate is valid
         if (loanRequestDto.getInterestRate() < 0.1 || loanRequestDto.getInterestRate() > 0.5) {
             throwValidationException(LOAN_INVALID_INTEREST_RATE);
         }
