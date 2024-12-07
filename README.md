@@ -8,7 +8,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 4. [Authorization](#authorization)
 5. [Database](#database)
 6. [Endpoints](#endpoints)
-7. [Postman Collection](#postman-collection)
+7. [Tests](#tests)
 
 ## Features
 - Create Loan : Create a loan for a given customer.
@@ -26,16 +26,18 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 ## Installation
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/username/loan-api.git](https://github.com/An2-San/Loan-API.git
-   cd loan-api
+   git clone https://github.com/An2-San/Loan-API.git
    ```
 2. **Build and run the application**
    ```bash
+   cd Loan-API\credit
    mvn clean install
    mvn spring-boot:run
    ```
 3. **Access the API :**
    The API will be available at http://localhost:8085.
+4. **Download Postman Collection :**
+   You can download postman collection from here : [Loan API.postman_collection.json](https://github.com/user-attachments/files/18049496/Loan.API.postman_collection.json)
 
 ## Authorization
 - **While ADMIN users can operate for all customers, CUSTOMER role users can operate for themselves.** (Bonus 1)
@@ -43,7 +45,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 - **ADMIN credentials : Username : admin , Password : admin_secret**
 - **CUSTOMER credentials : Username : {customerId}, Password : admin_secret** (for CUSTOMER role, password is the same with the ADMIN role for test purposes)
 
-## 5. Database
+## Database
 - You can access h2 database at : http://localhost:8085/h2-console.
 - Note : **When application built a customer will be inserted with id : "e7f4d254-2ff5-4e5b-9f42-83591b8b7c57".**
 - H2 Database Access Credentials:
@@ -59,7 +61,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
   
 **1. Create Loan**
   - POST /loan/create
-  - Example Request Body: 
+  - Request Body: 
 ```json
 {
     "customerId" : "e7f4d254-2ff5-4e5b-9f42-83591b8b7c57",
@@ -80,7 +82,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
     - customerId: Required.
     - numberOfInstallment: Optional(e.g., 6) - Used for filtering.
     - isPaid: Optional(e.g., false) - Used for filtering
-  - Example Response :
+  - Response :
 ```json
 [
     {
@@ -99,7 +101,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
     - customerId: Required.
     - loanId: Required.
     - isPaid: Optional(e.g., false) - Used for filtering
-- Example Response Body:
+- Response Body:
 ```json
 [
     {
@@ -201,13 +203,13 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 ]
 ```
 
-## Postman Collection
 
-You can download postman collection from here : 
-
-
-
-
-
-
-
+## Tests
+- Run this command to start LoanService unit tests :
+   ```bash
+   mvn -Dtest=LoanServiceTest test
+   ```
+- Run this command to start LoanValidationService unit tests :
+  ```bash
+   mvn -Dtest=LoanValidationTest test
+   ```
