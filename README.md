@@ -42,7 +42,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 - **ADMIN credentials : Username : admin , Password : admin_secret**
 - **CUSTOMER credentials : Username : {customerId}, Password : admin_secret** (for CUSTOMER role, password is the same with the ADMIN role for test purposes)
 
-## 5. Database
+## Database
 - You can access h2 database at : http://localhost:8085/h2-console.
 - Note : **When application built a customer will be inserted with id : "e7f4d254-2ff5-4e5b-9f42-83591b8b7c57".**
 - H2 Database Access Credentials:
