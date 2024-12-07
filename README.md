@@ -59,7 +59,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
   
 **1. Create Loan**
   - POST /loan/create
-  - Example Request Body: 
+  - Request Body: 
 ```json
 {
     "customerId" : "e7f4d254-2ff5-4e5b-9f42-83591b8b7c57",
@@ -80,7 +80,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
     - customerId: Required.
     - numberOfInstallment: Optional(e.g., 6) - Used for filtering.
     - isPaid: Optional(e.g., false) - Used for filtering
-  - Example Response :
+  - Response :
 ```json
 [
     {
@@ -99,7 +99,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
     - customerId: Required.
     - loanId: Required.
     - isPaid: Optional(e.g., false) - Used for filtering
-- Example Response Body:
+- Response Body:
 ```json
 [
     {
