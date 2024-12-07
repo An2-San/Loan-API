@@ -24,7 +24,7 @@ public class CustomerController {
         return ResponseEntity.ok(customer);
     }
 
-    @PostMapping("list-customers")
+    @GetMapping("list-customers")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Customer>> listCustomers() {
         return ResponseEntity.ok(customerService.listCustomers());

@@ -57,7 +57,7 @@ public class LoanValidationTest {
     }
 
     @Test
-    public void validateInstallmentException() {
+    public void validateNumberOfInstallmentException() {
         loanRequestDto.setNumberOfInstallments(2);
         ResponseStatusException exception = Assertions.assertThrowsExactly(ResponseStatusException.class, () -> loanValidationService.validateLoanDto(loanRequestDto, customerOptional));
         Assertions.assertEquals(exception.getReason(), LOAN_INVALID_INSTALLMENT_NUMBER.getExceptionMessage());

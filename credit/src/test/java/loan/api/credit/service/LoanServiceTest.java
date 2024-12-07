@@ -93,6 +93,21 @@ public class LoanServiceTest {
     }
 
     /**
+     * Pay the first 2 loan installment
+     * Second payment will be failed because paidAmount is not enough , Paid Amount : 150.00 , Excepted Amount To Pay 2 Installment : 200.00
+     */
+    @Test
+    public void payFirst2LoanInstallmentOnDueDateFailed() {
+        LoanInstallment firstLoanInstallment = loan.getLoanInstallmentList().get(0);
+        payLoanRequestDto.setAmount(new BigDecimal(150.00).setScale(2, RoundingMode.HALF_UP));
+        ZonedDateTime paymentDate = firstLoanInstallment.getDueDate();
+        PayLoanResponseDto payLoanResponseDto = loanService.payLoan(payLoanRequestDto, paymentDate);
+        Assertions.assertEquals(1, payLoanResponseDto.getNumberOfInstallmentsPaid());
+        Assertions.assertEquals(false, payLoanResponseDto.getIsPaidCompletely());
+        Assertions.assertEquals(0, compareTotalAmountSpent(loan.getLoanInstallmentList(), payLoanResponseDto.getTotalAmountSpent()));
+    }
+
+    /**
      * Bonus 2: Pay the first loan installment with discount
      */
     @Test

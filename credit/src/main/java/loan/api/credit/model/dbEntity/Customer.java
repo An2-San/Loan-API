@@ -1,5 +1,6 @@
 package loan.api.credit.model.dbEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,7 @@ public class Customer {
     private BigDecimal usedCreditLimit;
 
     @Transient
+    @JsonIgnore
     public BigDecimal getRemainingCreditLimit(){
         return creditLimit.subtract(usedCreditLimit == null ? BigDecimal.ZERO : usedCreditLimit);
     }
