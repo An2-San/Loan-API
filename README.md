@@ -204,9 +204,4 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 
 You can download postman collection from here : 
 
-
-
-
-
-
-
+[Loan API.postman_collection.json](https://github.com/user-attachments/files/18049496/Loan.API.postman_collection.json)
