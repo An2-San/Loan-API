@@ -26,8 +26,7 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 ## Installation
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/username/loan-api.git](https://github.com/An2-San/Loan-API.git
-   cd loan-api
+   git clone https://github.com/An2-San/Loan-API.git
    ```
 2. **Build and run the application**
    ```bash
