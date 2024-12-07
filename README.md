@@ -8,7 +8,6 @@ Loan API is an REST API that employees can create, list and pay loans for their 
 4. [Authorization](#authorization)
 5. [Database](#database)
 6. [Endpoints](#endpoints)
-7. [Postman Collection](#postman-collection)
 
 ## Features
 - Create Loan : Create a loan for a given customer.
@@ -35,6 +34,8 @@ Loan API is an REST API that employees can create, list and pay loans for their 
    ```
 3. **Access the API :**
    The API will be available at http://localhost:8085.
+4. **Download Postman Collection :**
+   You can download postman collection from here : [Loan API.postman_collection.json](https://github.com/user-attachments/files/18049496/Loan.API.postman_collection.json)
 
 ## Authorization
 - **While ADMIN users can operate for all customers, CUSTOMER role users can operate for themselves.** (Bonus 1)
@@ -199,9 +200,3 @@ Loan API is an REST API that employees can create, list and pay loans for their 
     }
 ]
 ```
-
-## Postman Collection
-
-You can download postman collection from here : 
-
-[Loan API.postman_collection.json](https://github.com/user-attachments/files/18049496/Loan.API.postman_collection.json)
